@@ -44,8 +44,26 @@ const UsersList = () => {
 		},
 		{ name: "Email", selector: (row) => row.email },
 		{
-			name: "Actions",
-			cell: (row) => <button onClick={() => handleEdit(row)}>Edit</button>,
+			name: "Edit",
+			cell: (row) => (
+				<button
+					className="cursor-pointer px-1.5 py-0.5 bg-neutral-300 rounded hover:bg-neutral-100 transition-all duration-200"
+					onClick={() => handleEdit(row)}
+				>
+					Edit
+				</button>
+			),
+		},
+		{
+			name: "Delete",
+			cell: (row) => (
+				<button
+					className="cursor-pointer px-1.5 py-0.5 bg-neutral-300 rounded hover:bg-neutral-100 transition-all duration-200"
+					onClick={() => document.getElementById("my_modal_5").showModal()}
+				>
+					Delete
+				</button>
+			),
 		},
 	];
 
@@ -61,6 +79,20 @@ const UsersList = () => {
 				paginationTotalRows={users.total}
 				onChangePage={handlePageChange}
 			/>
+			<dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Hello!</h3>
+					<p className="py-4">
+						Press ESC key or click the button below to close
+					</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Close</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
 		</div>
 	);
 };

@@ -1,12 +1,60 @@
-# React + Vite
+# EmployWise Frontend Assignment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+This is a frontend application for the EmployWise assignment. It includes user authentication, user listing, editing, and deletion functionalities. The project is built using React with Vite and styled using TailwindCSS.
 
-Currently, two official plugins are available:
+## [Live Link](https://jobtask-employwise.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+- **User Authentication**: Login functionality with token-based authentication.
+- **User Management**:
+  - Fetch and display user list.
+  - Edit user details.
+  - Delete users.
+- **Pagination**: Supports server-side pagination.
+- **API Handling**: Uses Axios for API calls.
 
-## Expanding the ESLint configuration
+## Technologies Used
+- **React (Vite)** – For frontend development.
+- **React Router** – For routing between pages.
+- **TailwindCSS** – For styling.
+- **Axios** – For API requests.
+- **React Data Table Component** – For user listing and pagination.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Installation & Setup
+### Prerequisites
+Ensure you have **Node.js** and **Yarn** installed.
+
+### Steps
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/ii-shimul/jobtask-employwise
+   cd jobtask-employwise
+   ```
+2. Install dependencies:
+   ```sh
+   yarn install
+   ```
+3. Start the development server:
+   ```sh
+   yarn dev
+   ```
+
+## API Endpoints
+- **Login**: `POST https://reqres.in/api/login`
+- **Fetch Users**: `GET https://reqres.in/api/users?page={page}`
+- **Edit User**: `PUT https://reqres.in/api/users/{id}`
+- **Delete User**: `DELETE https://reqres.in/api/users/{id}`
+
+## Deployment
+To deploy the application:
+1. Build the project:
+   ```sh
+   yarn build
+   ```
+2. Deploy to a hosting service like **Vercel** or **Netlify**.
+
+## Author
+- **Injamamul Islam Shimul**
+- **Email: islamshimul27@gmail.com**
+
