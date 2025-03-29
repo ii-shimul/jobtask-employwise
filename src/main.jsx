@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login/Login.jsx";
+import LoginCheck from "./pages/LoginCheck/LoginCheck.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/users",
-        element: <h1>users</h1>,
+        element: (
+          <LoginCheck>
+            <h1>users</h1>
+          </LoginCheck>
+        ),
       },
       {
         path: "/users/:id",

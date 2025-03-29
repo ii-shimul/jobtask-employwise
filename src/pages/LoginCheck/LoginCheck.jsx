@@ -1,11 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-const LoginCheck = ({children}) => {
-  const navigate = useNavigate()
-  const token = localStorage.getItem("token") || null;
+const LoginCheck = ({ children }) => {
+  const token = localStorage.getItem("token");
   if (!token) {
-    navigate("/");
-    return;
+    return <Navigate to={"/"}></Navigate>;
   }
   return children;
 };
