@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login/Login.jsx";
 import LoginCheck from "./pages/LoginCheck/LoginCheck.jsx";
+import UsersList from "./pages/UsersList/UsersList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
         path: "/users",
         element: (
           <LoginCheck>
-            <h1>users</h1>
+            <UsersList/>
           </LoginCheck>
         ),
       },
