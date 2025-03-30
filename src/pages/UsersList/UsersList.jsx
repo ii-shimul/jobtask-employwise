@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 
 const UsersList = () => {
-	const [users, setUsers] = useState({ data: [], total: 0 });
+	const [users, setUsers] = useState([]);
 	const [page, setPage] = useState(1);
 	const [userEdit, setUserEdit] = useState([]);
+	const [userDelete, setUserDelete] = useState([]);
+	const [totalUsers, setTotalUsers] = useState(0);
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -13,7 +15,8 @@ const UsersList = () => {
 				const result = await axios.get(
 					`https://reqres.in/api/users?page=${page}`
 				);
-				setUsers(result.data);
+				setUsers(result.data.data);
+				setTotalUsers(result.data.total);
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}
@@ -21,8 +24,9 @@ const UsersList = () => {
 		fetchUsers();
 	}, [page]);
 
-	if (!users.data.length)
+	if (!users.length) {
 		return <p className="text-center text-3xl">Loading...</p>;
+	}
 
 	const handleEdit = async (e, user) => {
 		e.preventDefault();
@@ -30,20 +34,44 @@ const UsersList = () => {
 		const lastName = e.target.last_name.value;
 		const email = e.target.email.value;
 		const result = await axios.put(`https://reqres.in/api/users/${user.id}`, {
-			first_name: firstName, 
-			last_name: lastName, 
+			first_name: firstName,
+			last_name: lastName,
 			email: email,
 		});
 
 		if (result.status === 200) {
 			alert("Success!");
-      e.target.reset()
-      document.getElementById("my_modal_5").close();
+      const updatedUser = {
+				...userEdit,
+				first_name: firstName,
+				last_name: lastName,
+				email: email,
+			};
+      setUsers(
+				users.map((user) =>
+					user.id === userEdit.id ? { ...user, ...updatedUser } : user
+				)
+			);
 		} else {
-      e.target.reset();
-			document.getElementById("my_modal_5").close();
 			alert("Something went wrong!");
 		}
+		e.target.reset();
+		document.getElementById("my_modal_5").close();
+	};
+
+	const handleDelete = async () => {
+		const result = await axios.delete(
+			`https://reqres.in/api/users/${userDelete.id}`
+		);
+		if (result.status === 204) {
+			alert("Success!");
+			const newUsers = users.filter((user) => user.id !== userDelete.id);
+			setUsers(newUsers);
+			setTotalUsers((prev) => prev - 1);
+		} else {
+			alert("Something went wrong!");
+		}
+		document.getElementById("my_modal_4").close();
 	};
 
 	const handlePageChange = (newPage) => {
@@ -69,8 +97,8 @@ const UsersList = () => {
 				<button
 					className="cursor-pointer px-1.5 py-0.5 bg-neutral-300 rounded hover:bg-neutral-100 transition-all duration-200"
 					onClick={() => {
-						document.getElementById("my_modal_5").showModal();
 						setUserEdit(row);
+						document.getElementById("my_modal_5").showModal();
 					}}
 				>
 					Edit
@@ -80,7 +108,13 @@ const UsersList = () => {
 		{
 			name: "Delete",
 			cell: (row) => (
-				<button className="cursor-pointer px-1.5 py-0.5 bg-red-300 rounded hover:bg-red-100 transition-all duration-200">
+				<button
+					onClick={() => {
+						setUserDelete(row);
+						document.getElementById("my_modal_4").showModal();
+					}}
+					className="cursor-pointer px-1.5 py-0.5 bg-red-300 rounded hover:bg-red-100 transition-all duration-200"
+				>
 					Delete
 				</button>
 			),
@@ -91,12 +125,12 @@ const UsersList = () => {
 		<div className="w-full">
 			<DataTable
 				columns={columns}
-				data={users.data}
+				data={users}
 				title="Users"
 				pagination
 				paginationServer
 				paginationPerPage={6}
-				paginationTotalRows={users.total}
+				paginationTotalRows={totalUsers}
 				onChangePage={handlePageChange}
 			/>
 			<dialog id="my_modal_5" className="modal">
@@ -144,6 +178,30 @@ const UsersList = () => {
 							Submit
 						</button>
 					</form>
+				</div>
+				<form method="dialog" className="modal-backdrop">
+					<button>close</button>
+				</form>
+			</dialog>
+
+			<dialog id="my_modal_4" className="modal">
+				<div className="modal-box">
+					<form method="dialog">
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							✕
+						</button>
+					</form>
+					<div>
+						<h1>Do you really want to delete the user?</h1>
+						<div className="modal-action">
+							<button onClick={handleDelete} className="btn btn-warning">
+								Confirm
+							</button>
+							<form method="dialog">
+								<button className="btn">Cancel</button>
+							</form>
+						</div>
+					</div>
 				</div>
 				<form method="dialog" className="modal-backdrop">
 					<button>close</button>
