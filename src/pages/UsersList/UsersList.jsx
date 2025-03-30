@@ -32,6 +32,13 @@ const UsersList = () => {
 		return <p className="text-center text-3xl">Loading...</p>;
 	}
 
+	// filter users based on the search query
+	const filteredUsers = users.filter((user) =>
+		`${user.first_name} ${user.last_name} ${user.email}`
+			.toLowerCase()
+			.includes(searchQuery.toLowerCase())
+	);
+
 	// function for editing users
 	const handleEdit = async (e, user) => {
 		e.preventDefault();
@@ -131,9 +138,19 @@ const UsersList = () => {
 
 	return (
 		<div className="w-full">
+			{/* Search Input */}
+			<div className="mb-4">
+				<input
+					type="text"
+					placeholder="Search by name or email"
+					className="input input-bordered w-full"
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
+				/>
+			</div>
 			<DataTable
 				columns={columns}
-				data={users}
+				data={filteredUsers}
 				title="Users"
 				pagination
 				paginationServer
