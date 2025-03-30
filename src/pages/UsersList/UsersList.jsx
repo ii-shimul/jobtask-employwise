@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import toast from "react-hot-toast";
 
 const UsersList = () => {
 	const [users, setUsers] = useState([]);
@@ -8,7 +9,9 @@ const UsersList = () => {
 	const [userEdit, setUserEdit] = useState([]);
 	const [userDelete, setUserDelete] = useState([]);
 	const [totalUsers, setTotalUsers] = useState(0);
+	const [searchQuery, setSearchQuery] = useState("");
 
+	// load users
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
@@ -24,10 +27,12 @@ const UsersList = () => {
 		fetchUsers();
 	}, [page]);
 
+	// return loading message if users not loaded yet
 	if (!users.length) {
 		return <p className="text-center text-3xl">Loading...</p>;
 	}
 
+	// function for editing users
 	const handleEdit = async (e, user) => {
 		e.preventDefault();
 		const firstName = e.target.first_name.value;
@@ -40,44 +45,47 @@ const UsersList = () => {
 		});
 
 		if (result.status === 200) {
-			alert("Success!");
-      const updatedUser = {
+			toast.success("Edited Successfully!");
+			const updatedUser = {
 				...userEdit,
 				first_name: firstName,
 				last_name: lastName,
 				email: email,
 			};
-      setUsers(
+			setUsers(
 				users.map((user) =>
 					user.id === userEdit.id ? { ...user, ...updatedUser } : user
 				)
 			);
 		} else {
-			alert("Something went wrong!");
+			toast.error("Something went wrong!");
 		}
 		e.target.reset();
 		document.getElementById("my_modal_5").close();
 	};
 
+	// function for deleting users
 	const handleDelete = async () => {
 		const result = await axios.delete(
 			`https://reqres.in/api/users/${userDelete.id}`
 		);
 		if (result.status === 204) {
-			alert("Success!");
+			toast.success("Success!");
 			const newUsers = users.filter((user) => user.id !== userDelete.id);
 			setUsers(newUsers);
 			setTotalUsers((prev) => prev - 1);
 		} else {
-			alert("Something went wrong!");
+			toast.error("Something went wrong!");
 		}
 		document.getElementById("my_modal_4").close();
 	};
 
+	// change page number for pagination
 	const handlePageChange = (newPage) => {
 		setPage(newPage);
 	};
 
+	// define columns for the data table
 	const columns = [
 		{
 			name: "Image",
@@ -132,7 +140,10 @@ const UsersList = () => {
 				paginationPerPage={6}
 				paginationTotalRows={totalUsers}
 				onChangePage={handlePageChange}
+				highlightOnHover
 			/>
+
+			{/* edit form modal */}
 			<dialog id="my_modal_5" className="modal">
 				<div className="modal-box">
 					<form method="dialog">
@@ -184,6 +195,7 @@ const UsersList = () => {
 				</form>
 			</dialog>
 
+			{/* delete confirmation modal */}
 			<dialog id="my_modal_4" className="modal">
 				<div className="modal-box">
 					<form method="dialog">

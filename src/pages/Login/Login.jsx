@@ -3,6 +3,7 @@ import login from "/src/assets/Privacy policy-rafiki.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UsersList from "../UsersList/UsersList";
+import toast from "react-hot-toast";
 
 const Login = () => {
 	const [loading, setLoading] = useState(false);
@@ -18,10 +19,11 @@ const Login = () => {
 				password: password,
 			});
 			localStorage.setItem("token", result.data.token);
+			toast.success("Welcome!")
 			navigate("/users");
 			setLoading(false);
 		} catch (error) {
-			alert(error.message);
+			toast.error(error.message);
 			setLoading(false);
 		}
 	};
@@ -37,59 +39,83 @@ const Login = () => {
 				</div>
 				<form onSubmit={handleSubmit} className="max-w-md md:ml-auto w-full">
 					<h3 className="text-slate-900 lg:text-3xl text-2xl font-bold mb-8">
-						Log in
+						Log in to your account	
 					</h3>
-					<div className="space-y-6">
-						<div>
-							<label className="text-sm text-slate-800 font-medium mb-2 block">
-								Email
-							</label>
+					<div className="space-y-2">
+						<label className="text-sm text-slate-800 font-medium mb-2 block">
+							Email
+						</label>
+						<label className="input validator w-full">
+							<svg
+								className="h-[1em] opacity-50"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+							>
+								<g
+									strokeLinejoin="round"
+									strokeLinecap="round"
+									strokeWidth="2.5"
+									fill="none"
+									stroke="currentColor"
+								>
+									<rect width="20" height="16" x="2" y="4" rx="2"></rect>
+									<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+								</g>
+							</svg>
 							<input
 								name="email"
 								type="email"
+								placeholder="mail@site.com"
 								required
-								className="bg-slate-100 w-full text-sm text-slate-800 px-4 py-3 rounded-md outline-none border focus:border-blue-600 focus:bg-transparent"
-								placeholder="Enter Email"
 							/>
+						</label>
+						<div className="validator-hint hidden">
+							Enter valid email address
 						</div>
-						<div>
-							<label className="text-sm text-slate-800 font-medium mb-2 block">
-								Password
-							</label>
-							<input
-								name="password"
-								type="password"
-								required
-								className="bg-slate-100 w-full text-sm text-slate-800 px-4 py-3 rounded-md outline-none border focus:border-blue-600 focus:bg-transparent"
-								placeholder="Enter Password"
-							/>
-						</div>
-						<div className="flex flex-wrap items-center justify-between gap-4">
-							<div className="flex items-center">
-								<input
-									id="remember-me"
-									name="remember-me"
-									type="checkbox"
-									className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
-								/>
-								<label
-									htmlFor="remember-me"
-									className="ml-3 block text-sm text-slate-500"
+
+						<label className="text-sm text-slate-800 font-medium mb-2 block">
+							Password
+						</label>
+						<label className="input validator w-full">
+							<svg
+								className="h-[1em] opacity-50"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+							>
+								<g
+									strokeLinejoin="round"
+									strokeLinecap="round"
+									strokeWidth="2.5"
+									fill="none"
+									stroke="currentColor"
 								>
-									Remember me
-								</label>
-							</div>
-							<div className="text-sm">
-								<a className="text-blue-600 hover:text-blue-500 font-medium">
-									Forgot your password?
-								</a>
-							</div>
-						</div>
+									<path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
+									<circle
+										cx="16.5"
+										cy="7.5"
+										r=".5"
+										fill="currentColor"
+									></circle>
+								</g>
+							</svg>
+
+							<input
+								type="password"
+								name="password"
+								required
+								placeholder="Password"
+								minlength="8"
+							/>
+						</label>
+						<p className="validator-hint hidden">
+							Must be more than 8 characters
+						</p>
+
 					</div>
 					<div className="!mt-12">
 						<button
 							type="submit"
-							className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+							className="btn btn-neutral w-full shadow-xl focus:outline-none"
 						>
 							{loading ? "Loading..." : "Log in"}
 						</button>
